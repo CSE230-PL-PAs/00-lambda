@@ -6,6 +6,7 @@
 let TRUE  = \x y -> x
 let FALSE = \x y -> y
 let ITE   = \b x y -> b x y
+let NOT   = \b -> ITE b FALSE TRUE
 let AND   = \b1 b2 -> ITE b1 b2 FALSE
 let OR    = \b1 b2 -> ITE b1 TRUE b2
 
@@ -37,11 +38,11 @@ let TODO  = \i g n o r e -> i g n o r e
 -- do not modify text BEFORE this line
 --------------------------------------------------------------------------------
 
-let SKIP1 = TODO       -- (a)
-let DEC   = TODO       -- (b)
-let SUB   = TODO       -- (c)
-let ISZ   = TODO       -- (d)
-let EQL   = TODO       -- (e)
+let SKIP1 = \f p -> (\b -> b TRUE (ITE (FST p) (f (SND p)) (SND p)))         -- (a)
+let DEC   = \n -> SND (n (SKIP1 INC) (PAIR FALSE ZERO))       -- (b)
+let SUB   = \n1 n2 -> n2 DEC n1       -- (c)
+let ISZ   = \n -> NOT (n FALSE NOT TRUE)       -- (d)
+let EQL   = \n1 n2 -> AND (ISZ (SUB n1 n2)) (ISZ (SUB n2 n1))      -- (e)
 
 --------------------------------------------------------------------------------
 -- do not modify text AFTER this line
